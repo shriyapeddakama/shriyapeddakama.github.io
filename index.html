@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shriya Peddakama — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --olive:#5a6e3a;--olive-dark:#4a5c2e;--olive-light:#7a8e55;
+  --cream:#f0ead8;--window-bg:#f5f0e5;--text:#2a2a2a;
+  --orange:#e07820;--pink:#e06090;--grid:rgba(90,110,58,0.15);
+  --folder:#f5c842;--taskbar:#3a4e22;--taskbar-top:#6a8044;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--cream);font-family:'Nunito',sans-serif;color:var(--text);position:relative}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;z-index:0}
+
+/* ── TASKBAR ── */
+#taskbar{position:fixed;bottom:0;left:0;right:0;height:44px;z-index:9999;
+  background:linear-gradient(to bottom,var(--taskbar-top),var(--taskbar));
+  border-top:2px solid var(--olive-light);display:flex;align-items:center;padding:0 8px;gap:6px}
+#start-btn{display:flex;align-items:center;gap:6px;background:linear-gradient(to bottom,#7aaa44,#4a7a22);
+  border:1.5px solid #a0cc66;border-radius:14px;padding:4px 14px 4px 8px;cursor:pointer;
+  color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;white-space:nowrap;
+  box-shadow:0 2px 6px rgba(0,0,0,.4)}
+#start-btn:hover{filter:brightness(1.15)}
+.start-dot{width:20px;height:20px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
+.tb-div{width:2px;height:28px;background:linear-gradient(to bottom,transparent,var(--olive-light),transparent)}
+#tb-search{display:flex;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  border-radius:4px;padding:3px 8px;gap:5px;width:220px}
+#tb-search input{background:none;border:none;outline:none;color:rgba(255,255,255,.8);font-family:'Nunito',sans-serif;font-size:12px;width:100%}
+#tb-search input::placeholder{color:rgba(255,255,255,.45)}
+#tb-tabs{display:flex;gap:4px;flex:1;overflow:hidden}
+.tb-tab{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  border-radius:4px;padding:3px 10px;cursor:pointer;color:#fff;font-size:11px;font-weight:600;white-space:nowrap;transition:background .15s}
+.tb-tab:hover,.tb-tab.active{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.45)}
+#tray{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.12);
+  border-radius:4px;padding:3px 10px;margin-left:auto}
+.tray-ico{font-size:14px;cursor:default;opacity:.8}
+#clock{color:#fff;font-size:11px;font-weight:700;text-align:center;line-height:1.35;cursor:default}
+
+/* ── DESKTOP ── */
+#desktop{position:fixed;inset:0;bottom:44px;z-index:1;overflow:hidden}
+
+/* ── SOCIAL BAR ── */
+#social-bar{position:absolute;top:14px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:10}
+.soc-btn{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;cursor:pointer;border:2px solid rgba(255,255,255,.45);text-decoration:none;
+  box-shadow:0 3px 10px rgba(0,0,0,.2);transition:transform .15s,box-shadow .15s}
+.soc-btn:hover{transform:translateY(-3px);box-shadow:0 7px 18px rgba(0,0,0,.3)}
+.soc-btn svg{fill:#fff;width:24px;height:24px}
+.s-li{background:linear-gradient(135deg,#3a85d4,#1e5fa8)}
+.s-gh{background:linear-gradient(135deg,#555,#222)}
+.s-em{background:linear-gradient(135deg,#e84c8d,#c0306a)}
+.s-re{background:linear-gradient(135deg,#4aaa55,#2a7a35)}
+
+/* ── DESKTOP ICONS ── */
+.icon-col{position:absolute;top:80px;display:flex;flex-direction:column;gap:18px;align-items:center}
+#col-left{left:16px}
+#col-right{right:16px}
+.desk-icon{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;width:80px;
+  padding:6px;border-radius:6px;transition:background .15s}
+.desk-icon:hover{background:rgba(90,110,58,.18)}
+.desk-icon:hover .di-label{background:rgba(90,110,58,.5);border-radius:3px}
+.di-img{font-size:42px;line-height:1;transition:transform .15s;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
+.desk-icon:hover .di-img{transform:scale(1.1)}
+.di-label{font-size:11px;font-weight:700;text-align:center;padding:2px 5px;color:var(--text);
+  text-shadow:0 1px 3px rgba(255,255,255,.7);line-height:1.2}
+.h-tile{width:46px;height:46px;background:var(--olive-dark);border-radius:10px;display:flex;align-items:center;
+  justify-content:center;color:#fff;font-size:24px;font-weight:800;font-family:Georgia,serif;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);border:2px solid var(--olive-light)}
+
+/* ── WINDOWS ── */
+.win{position:absolute;background:var(--window-bg);border:1.5px solid rgba(90,110,58,.3);border-radius:8px;
+  overflow:hidden;box-shadow:4px 4px 0 rgba(90,110,58,.22),0 8px 28px rgba(0,0,0,.14);
+  display:none;min-width:320px;z-index:100}
+.win.active{display:block}
+.win-bar{background:linear-gradient(to bottom,var(--olive-light),var(--olive));padding:8px 12px;
+  display:flex;align-items:center;justify-content:space-between;cursor:move;user-select:none}
+.win-title{color:#e8f0cc;font-family:'VT323',monospace;font-size:18px;letter-spacing:.5px;flex:1}
+.win-btns{display:flex;gap:5px}
+.wb{width:17px;height:17px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-size:10px;cursor:pointer;border:1.5px solid rgba(0,0,0,.2);font-weight:800;color:rgba(0,0,0,.55);transition:filter .1s}
+.wb:hover{filter:brightness(1.2)}
+.wb-min{background:#f5d860}.wb-max{background:#7ac855}.wb-cls{background:#e05555;color:#fff}
+.win-body{padding:20px 22px;overflow-y:auto;max-height:calc(100vh - 160px)}
+.acc-bar{height:11px;background:linear-gradient(to right,var(--orange),#f0a040);border-radius:4px;margin-bottom:16px}
+.sec-title{font-size:14px;font-weight:800;color:var(--text);text-align:center;margin-bottom:14px;
+  letter-spacing:1px;text-transform:uppercase}
+
+/* profile window */
+#win-profile{top:90px;left:50%;transform:translateX(-50%);width:560px}
+.profile-card{display:flex;align-items:center;gap:22px}
+#avatar-wrap{width:140px;height:140px;flex-shrink:0;position:relative;cursor:pointer}
+#avatar-wrap svg{width:100%;height:100%}
+.profile-info .hi{font-size:13px;color:#666;font-weight:600;margin-bottom:2px}
+.profile-info .name{font-size:28px;font-weight:800;color:var(--orange);line-height:1.15;margin-bottom:4px}
+.profile-info .role{font-size:10px;font-weight:700;color:var(--olive-dark);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px}
+.profile-info .quote{font-size:12px;color:#666;font-style:italic;margin-bottom:8px}
+.status-badge{display:inline-flex;align-items:center;gap:5px;background:#e8f5e0;border:1.5px solid #7ac855;
+  border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:#3a6e22}
+
+/* about */
+#win-about{top:100px;left:55%;width:440px}
+.about-text{font-size:13px;line-height:1.75;color:#444}
+
+/* skills */
+#win-skills{top:80px;left:30%;width:500px}
+.skill-cat{margin-bottom:14px}
+.skill-cat-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.skill-cat-icon{font-size:18px}
+.skill-cat-name{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--olive-dark)}
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px}
+.skill-tag{background:#fff;border:1.5px solid rgba(90,110,58,.3);border-radius:20px;
+  padding:3px 10px;font-size:11px;font-weight:700;color:#444;transition:all .15s}
+.skill-tag:hover{background:var(--olive);color:#fff;border-color:var(--olive)}
+
+/* experience */
+#win-exp{top:100px;left:20%;width:520px}
+.exp-card{background:#fff;border:1.5px solid rgba(90,110,58,.2);border-radius:8px;padding:14px 16px;margin-bottom:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.exp-card:last-child{margin-bottom:0}
+.exp-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.exp-emoji{font-size:24px;flex-shrink:0;margin-top:2px}
+.exp-company{font-size:14px;font-weight:800;color:var(--text)}
+.exp-role{font-size:12px;font-weight:700;color:var(--orange);margin-bottom:2px}
+.exp-meta{font-size:11px;color:#888;font-weight:600}
+.exp-bullets{padding-left:16px}
+.exp-bullets li{font-size:12px;line-height:1.6;color:#444;margin-bottom:4px;list-style:disc}
+
+/* projects */
+#win-projects{top:80px;left:38%;width:500px}
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.proj-card{background:#fff;border:1.5px solid rgba(90,110,58,.2);border-radius:8px;overflow:hidden;
+  cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.proj-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.proj-thumb{height:74px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.proj-info{padding:8px 10px}
+.proj-title{font-size:12px;font-weight:800;margin-bottom:4px}
+.proj-tag{display:inline-block;font-size:9px;font-weight:700;background:var(--olive);color:#fff;
+  border-radius:20px;padding:2px 8px;letter-spacing:.5px}
+
+/* resume */
+#win-resume{top:110px;left:25%;width:480px}
+.resume-terminal{background:#1a1a1a;border-radius:6px;padding:16px;font-family:'VT323',monospace;
+  font-size:15px;color:#7aff6a;line-height:1.7;white-space:pre-wrap;max-height:420px;overflow-y:auto}
+.resume-dl{display:flex;justify-content:flex-end;margin-bottom:10px}
+.resume-dl button{background:var(--olive);color:#fff;border:none;border-radius:6px;
+  padding:6px 14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;cursor:pointer}
+.resume-dl button:hover{filter:brightness(1.15)}
+
+/* contact */
+#win-contact{top:110px;left:40%;width:380px}
+.contact-body{text-align:center}
+.contact-msg{font-size:13px;color:#555;margin-bottom:16px;font-style:italic}
+.contact-btns{display:flex;flex-direction:column;gap:8px;align-items:center}
+.c-btn{display:flex;align-items:center;gap:8px;padding:9px 20px;border-radius:25px;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none;
+  border:none;transition:transform .15s,box-shadow .15s;color:#fff}
+.c-btn:hover{transform:translateY(-2px);box-shadow:0 5px 14px rgba(0,0,0,.2)}
+.c-btn.em{background:linear-gradient(135deg,#e84c8d,#c0306a)}
+.c-btn.li{background:linear-gradient(135deg,#3a85d4,#1e5fa8)}
+.c-btn.gh{background:linear-gradient(135deg,#555,#222)}
+
+/* PROJECT DETAIL OVERLAY */
+#proj-overlay{position:fixed;inset:0;bottom:44px;z-index:9000;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
+#proj-overlay.open{display:flex}
+#proj-detail{background:var(--window-bg);border-radius:8px;width:680px;max-height:85vh;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);display:flex;flex-direction:column}
+#proj-detail .win-bar{cursor:default}
+.pd-body{overflow-y:auto;padding:22px 26px;flex:1}
+.pd-thumb{height:120px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:52px;margin-bottom:18px}
+.pd-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:6px}
+.pd-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pd-tag{font-size:10px;font-weight:700;background:var(--olive);color:#fff;border-radius:20px;padding:3px 10px;letter-spacing:.5px}
+.pd-desc{font-size:13px;line-height:1.8;color:#444;margin-bottom:16px}
+.pd-stack-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--olive-dark);margin-bottom:8px}
+.pd-stack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.pd-stack span{background:#fff;border:1.5px solid rgba(90,110,58,.3);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:#555}
+.pd-links{display:flex;gap:10px}
+.pd-link{display:flex;align-items:center;gap:6px;padding:8px 18px;border-radius:25px;font-family:'Nunito',sans-serif;
+  font-weight:700;font-size:12px;cursor:pointer;text-decoration:none;color:#fff;border:none}
+.pd-link.gh-l{background:#333}
+.pd-link.demo-l{background:var(--orange)}
+.pd-link:hover{filter:brightness(1.15)}
+.pd-media{background:#e8e0cc;border-radius:8px;height:180px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;font-size:13px;color:#888;font-style:italic;border:2px dashed rgba(90,110,58,.25)}
+
+/* draggable */
+.win{user-select:none}
+
+/* scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(90,110,58,.35);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- TASKBAR -->
+<div id="taskbar">
+  <button id="start-btn"><div class="start-dot">▶</div>Start</button>
+  <div class="tb-div"></div>
+  <div id="tb-search"><span>🔍</span><input type="text" placeholder="Search programs and files..."></div>
+  <div class="tb-div"></div>
+  <div id="tb-tabs"></div>
+  <div id="tray">
+    <span class="tray-ico">📶</span>
+    <span class="tray-ico">🔊</span>
+    <span class="tray-ico">🔋</span>
+    <div id="clock"></div>
+  </div>
+</div>
+
+<!-- DESKTOP -->
+<div id="desktop">
+
+  <!-- Social bar -->
+  <div id="social-bar">
+    <a class="soc-btn s-li" href="https://linkedin.com/in/shriyapeddakama" target="_blank" title="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 110-4.14 2.07 2.07 0 010 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.23 0z"/></svg>
+    </a>
+    <a class="soc-btn s-gh" href="https://github.com/shriyapeddakama" target="_blank" title="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.31-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016.01 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.86.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+    </a>
+    <a class="soc-btn s-em" href="mailto:shriyapeddakama@gmail.com" title="Email">📧</a>
+    <a class="soc-btn s-re" href="#" onclick="openWindow('resume');return false" title="Resume">📄</a>
+  </div>
+
+  <!-- Left icons -->
+  <div class="icon-col" id="col-left">
+    <div class="desk-icon" onclick="openWindow('profile')">
+      <div class="di-img"><div class="h-tile">S</div></div>
+      <span class="di-label">profile</span>
+    </div>
+    <div class="desk-icon" onclick="openWindow('exp')">
+      <div class="di-img">📁</div>
+      <span class="di-label">experience</span>
+    </div>
+    <div class="desk-icon" onclick="openWindow('projects')">
+      <div class="di-img">📁</div>
+      <span class="di-label">projects</span>
+    </div>
+  </div>
+
+  <!-- Right icons -->
+  <div class="icon-col" id="col-right">
+    <div class="desk-icon" onclick="openWindow('skills')">
+      <div class="di-img">📁</div>
+      <span class="di-label">skills</span>
+    </div>
+    <div class="desk-icon" onclick="openWindow('contact')">
+      <div class="di-img">📁</div>
+      <span class="di-label">contact</span>
+    </div>
+    <div class="desk-icon" onclick="openWindow('resume')">
+      <div class="di-img">📁</div>
+      <span class="di-label">resume</span>
+    </div>
+  </div>
+
+  <!-- ══ PROFILE WINDOW ══ -->
+  <div class="win active" id="win-profile">
+    <div class="win-bar" data-win="profile">
+      <span class="win-title">C:\SHRIYA\profile</span>
+      <div class="win-btns">
+        <div class="wb wb-min" onclick="closeWindow('profile')">─</div>
+        <div class="wb wb-max">□</div>
+        <div class="wb wb-cls" onclick="closeWindow('profile')">✕</div>
+      </div>
+    </div>
+    <div class="win-body">
+      <div class="profile-card">
+        <div id="avatar-wrap" onclick="avatarClick()">
+          <svg id="avatar-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <!-- bg circle -->
+            <circle cx="100" cy="110" r="95" fill="#e8dfc8"/>
+            <!-- hair back -->
+            <ellipse cx="100" cy="100" rx="58" ry="66" fill="#1a1a1a"/>
+            <!-- bob shape bottom -->
+            <path d="M44 108 C42 140,50 165,72 172 C84 162,100 158,116 162 C138 166,156 150,158 132 C160 118,156 105,152 95 C148 108,140 120,128 126 C116 132,100 134,84 130 C68 126,52 116,44 108Z" fill="#1a1a1a"/>
+            <!-- face -->
+            <ellipse cx="100" cy="118" rx="50" ry="54" fill="#f5c9a0"/>
+            <!-- ears -->
+            <ellipse cx="50" cy="118" rx="9" ry="11" fill="#f5c9a0"/>
+            <ellipse cx="150" cy="118" rx="9" ry="11" fill="#1a1a1a"/>
+            <ellipse cx="150" cy="118" rx="6" ry="8" fill="#f5c9a0"/>
+            <!-- neck -->
+            <rect x="88" y="162" width="24" height="22" rx="7" fill="#f5c9a0"/>
+            <!-- shoulders -->
+            <path d="M30 220 C30 195,60 180,100 178 C140 180,170 195,170 220Z" fill="#5a6e3a"/>
+            <!-- collar -->
+            <path d="M88 178 L100 195 L112 178Z" fill="#f5f0e5"/>
+            <!-- hair bangs -->
+            <path d="M48 98 C52 68,72 52,100 50 C128 52,148 68,152 98 C146 80,128 68,100 66 C72 68,54 80,48 98Z" fill="#111"/>
+            <!-- glasses left -->
+            <rect id="gl-l" x="60" y="110" width="34" height="24" rx="9" fill="none" stroke="#1a1a1a" stroke-width="3.5"/>
+            <!-- glasses right -->
+            <rect id="gl-r" x="106" y="110" width="34" height="24" rx="9" fill="none" stroke="#1a1a1a" stroke-width="3.5"/>
+            <!-- bridge -->
+            <line x1="94" y1="122" x2="106" y2="122" stroke="#1a1a1a" stroke-width="3"/>
+            <!-- arms -->
+            <line x1="60" y1="122" x2="50" y2="120" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+            <line x1="140" y1="122" x2="150" y2="120" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
+            <!-- eyebrows -->
+            <path d="M64 107 C70 104,78 103,86 105" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M114 105 C122 103,130 104,136 107" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <!-- eye whites -->
+            <ellipse id="eye-l-white" cx="77" cy="122" rx="10" ry="8" fill="white"/>
+            <ellipse id="eye-r-white" cx="123" cy="122" rx="10" ry="8" fill="white"/>
+            <!-- pupils (moved by JS) -->
+            <circle id="pupil-l" cx="77" cy="122" r="4" fill="#1a1a1a"/>
+            <circle id="pupil-r" cx="123" cy="122" r="4" fill="#1a1a1a"/>
+            <!-- eye shine -->
+            <circle id="shine-l" cx="79" cy="120" r="1.5" fill="white"/>
+            <circle id="shine-r" cx="125" cy="120" r="1.5" fill="white"/>
+            <!-- nose -->
+            <circle cx="100" cy="136" r="3" fill="#e8a880"/>
+            <!-- mouth (changes with JS) -->
+            <path id="avatar-mouth" d="M88 146 C93 151,107 151,112 146" stroke="#c07050" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <!-- blush -->
+            <ellipse cx="68" cy="138" rx="10" ry="6" fill="#f0a0a0" opacity="0.4"/>
+            <ellipse cx="132" cy="138" rx="10" ry="6" fill="#f0a0a0" opacity="0.4"/>
+            <!-- wave arm (animated) -->
+            <g id="wave-arm">
+              <line x1="140" y1="195" x2="165" y2="175" stroke="#5a6e3a" stroke-width="10" stroke-linecap="round"/>
+              <ellipse cx="170" cy="170" rx="10" ry="12" fill="#f5c9a0" stroke="#1a1a1a" stroke-width="2"/>
+            </g>
+          </svg>
+        </div>
+        <div class="profile-info">
+          <div class="hi">hi! i'm</div>
+          <div class="name">Shriya<br>Peddakama</div>
+          <div class="role">Data Engineer &amp; ML Enthusiast</div>
+          <div class="quote">"Building data-driven systems with intention."</div>
+          <div class="status-badge">🟢 Open to full-time opportunities</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ABOUT WINDOW ══ -->
+  <div class="win" id="win-about">
+    <div class="win-bar" data-win="about">
+      <span class="win-title">C:\SHRIYA\about</span>
+      <div class="win-btns">
+        <div class="wb wb-min" onclick="closeWindow('about')">─</div>
+        <div class="wb wb-max">□</div>
+        <div class="wb wb-cls" onclick="closeWindow('about')">✕</div>
+      </div>
+    </div>
+    <div class="win-body">
+      <p class="about-text">I'm a recent master's graduate from <strong>Carnegie Mellon University</strong> with a passion for data engineering, analytics, and machine learning. I love building end-to-end data systems — from pipelines to production ML — and finding patterns that tell meaningful stories.<br><br>Previously a Data Engineer at <strong>Amazon</strong>, I've worked on supply chain analytics, competitor benchmarking, and emerging marketplace forecasting. I'm currently seeking full-time roles where I can build things that matter.<br><br>She/her · Pittsburgh, PA · Open to relocation</p>
+    </div>
+  </div>
+
+  <!-- ══ SKILLS WINDOW ══ -->
+  <div class="win" id="win-skills">
+    <div class="win-bar" data-win="skills">
+      <span class="win-title">C:\SHRIYA\skills</span>
+      <div class="win-btns">
+        <div class="wb wb-min" onclick="closeWindow('skills')">─</div>
+        <div class="wb wb-max">□</div>
+        <div class="wb wb-cls" onclick="closeWindow('skills')">✕</div>
+      </div>
+    </div>
+    <div class="win-body">
+      <div class="acc-bar"></div>
+      <div class="sec-title">Tech Stack</div>
+      <div id="skills-list"></div>
+    </div>
+  </div>
+
+  <!-- ══ EXPERIENCE WINDOW ══ -->
+  <div class="win" id="win-exp">
+    <div class="win-bar" data-win="exp">
+      <span class="win-title">C:\SHRIYA\experience</span>
+      <div class="win-btns">
+        <div class="wb wb-min" onclick="closeWindow('exp')">─</div>
+        <div class="wb wb-max">□</div>
+        <div class="wb wb-cls" onclick="closeWindow('exp')">✕</div>
+      </div>
+    </div>
+    <div class="win-body" id="exp-body"></div>
+  </div>
+
+  <!-- ══ PROJECTS WINDOW ══ -->
+  <div class="win" id="win-projects">
+    <div class="win-bar" data-win="projects">
+      <span class="win-title">C:\SHRIYA\projects</span>
+      <div class="win-btns">
+        <div class="wb wb-min" onclick="closeWindow('projects')">─</div>
+        <div class="wb wb-max">□</div>
+        <div class="wb wb-cls" onclick="closeWindow('projects')">✕</div>
+      </div>
+    </div>
+    <div class="win-body">
+      <div class="acc-bar"></div>
+      <div class="sec-title">Projects</div>
+      <div class="proj-grid" id="proj-grid"></div>
+    </div>
+  </div>
+
+  <!-- ══ RESUME WINDOW ══ -->
+  <div class="win" id="win-resume">
+    <div class="win-bar" data-win="resume">
+      <span class="win-title">C:\SHRIYA\resume.txt</span>
+      <div class="win-btns">
+        <div class="wb wb-min" onclick="closeWindow('resume')">─</div>
+        <div class="wb wb-max">□</div>
+        <div class="wb wb-cls" onclick="closeWindow('resume')">✕</div>
+      </div>
+    </div>
+    <div class="win-body">
+      <div class="resume-dl"><button onclick="downloadResume()">💾 Save As...</button></div>
+      <div class="resume-terminal" id="resume-txt"></div>
+    </div>
+  </div>
+
+  <!-- ══ CONTACT WINDOW ══ -->
+  <div class="win" id="win-contact">
+    <div class="win-bar" data-win="contact">
+      <span class="win-title">C:\SHRIYA\contact</span>
+      <div class="win-btns">
+        <div class="wb wb-min" onclick="closeWindow('contact')">─</div>
+        <div class="wb wb-max">□</div>
+        <div class="wb wb-cls" onclick="closeWindow('contact')">✕</div>
+      </div>
+    </div>
+    <div class="win-body contact-body">
+      <p class="contact-msg">"Always happy to chat or collaborate — feel free to reach out!"</p>
+      <div class="contact-btns">
+        <a class="c-btn em" href="mailto:shriyapeddakama@gmail.com">📧 shriyapeddakama@gmail.com</a>
+        <a class="c-btn li" href="https://linkedin.com/in/shriyapeddakama" target="_blank">🔗 linkedin.com/in/shriyapeddakama</a>
+        <a class="c-btn gh" href="https://github.com/shriyapeddakama" target="_blank">🐙 github.com/shriyapeddakama</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end desktop -->
+
+<!-- PROJECT DETAIL OVERLAY -->
+<div id="proj-overlay" onclick="closeProjDetail(event)">
+  <div id="proj-detail">
+    <div class="win-bar">
+      <span class="win-title" id="pd-win-title">C:\SHRIYA\projects\...</span>
+      <div class="win-btns"><div class="wb wb-cls" onclick="closeProjDetail()">✕</div></div>
+    </div>
+    <div class="pd-body">
+      <div class="pd-thumb" id="pd-thumb"></div>
+      <div class="pd-title" id="pd-title"></div>
+      <div class="pd-tags" id="pd-tags"></div>
+      <div class="pd-media" id="pd-media">[ video / GIF embed — add your media here ]</div>
+      <div class="pd-desc" id="pd-desc"></div>
+      <div class="pd-stack-title">Tech Stack</div>
+      <div class="pd-stack" id="pd-stack"></div>
+      <div class="pd-links" id="pd-links"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const SKILLS = [
+  {cat:"Languages",  icon:"💻", items:["Python","SQL","Java","Shell"]},
+  {cat:"Data & ML",  icon:"📊", items:["Apache Spark","Kafka","Hadoop","PyTorch","Jupyter"]},
+  {cat:"Cloud & Infra",icon:"☁️",items:["AWS","Azure","GCP","Docker","Kubernetes"]},
+  {cat:"Databases",  icon:"🗄️", items:["PostgreSQL","MySQL","MongoDB","Snowflake","Redshift"]},
+  {cat:"Tools & Viz",icon:"🔧", items:["Git","GitHub","Power BI","Tableau","VS Code"]},
+];
+
+const EXP = [
+  {
+    emoji:"🏦", company:"Northwest Bancshares", role:"Data Scientist — Capstone",
+    meta:"Pittsburgh · Aug 2025 – Dec 2025",
+    bullets:[
+      "Leveraged OCR, SQL-style transformations, and Python to clean, normalize, and validate complex financial statement data across digital and scanned PDFs, supporting end-to-end analytics workflows.",
+      "Implemented KPI-driven validation and trend checks (balance sheet and retained earnings reconciliation) and generated executive dashboards, reducing manual review time by 90% while improving data accuracy and auditability for underwriting teams."
+    ]
+  },
+  {
+    emoji:"📦", company:"Amazon", role:"Data Engineer",
+    meta:"Hyderabad · Aug 2021 – Jan 2023",
+    bullets:[
+      "Utilized data modelling, SQL, Redshift, ETL, and S3 to develop stable and scalable data pipelines supporting tooling and analytic reporting in Supply Chain Optimization Technologies (SCOT).",
+      "Led analytics for Project Stopwatch, a competitor delivery-speed benchmarking system — redesigned analytical workflows to improve accuracy and reduce processing time by 55%, enabling leadership-ready reporting.",
+      "Supported forecast analytics for emerging marketplaces (UAE, Netherlands, Egypt, Turkey), evaluating demand spikes and contributing to reductions in out-of-stock customer views."
+    ]
+  },
+  {
+    emoji:"📦", company:"Amazon", role:"Data Engineer Intern",
+    meta:"Hyderabad · Jan 2021 – Jul 2021",
+    bullets:[
+      "Designed and implemented the backend for Goanna, an internal product analytics tool (200+ monthly users) used for root-cause analysis and anomaly detection.",
+      "Improved analytics pipeline efficiency by 35% by streamlining data workflows, optimizing query logic, and restructuring datasets to accelerate KPI calculations and reporting."
+    ]
+  }
+];
+
+const PROJECTS = [
+  {
+    id:"movie", emoji:"🎬", title:"Movie Recommender System",
+    tags:["ML","Production","Python"],
+    thumb:"linear-gradient(135deg,#e07820,#c04010)",
+    short:"Netflix-style rec engine with A/B testing.",
+    desc:"An end-to-end Netflix-style movie recommendation system built for production. The system includes model training, serving, monitoring, automated retraining pipelines, and A/B testing infrastructure to continuously evaluate recommendation quality.\n\nThe project covers the full ML lifecycle: data ingestion and preprocessing, collaborative filtering model training, a serving layer with REST API endpoints, real-time monitoring dashboards, and a retraining trigger based on model drift detection.",
+    stack:["Python","Jupyter","Scikit-learn","Docker","FastAPI","PostgreSQL"],
+    github:"https://github.com/shriyapeddakama/Movie-Recommender-System",
+    demo:null
+  },
+  {
+    id:"albumy", emoji:"🤖", title:"AlbumyML",
+    tags:["LLM","Accessibility","Python"],
+    thumb:"linear-gradient(135deg,#7040e0,#4020a0)",
+    short:"Instagram clone with AI alt-text + captions.",
+    desc:"An ML-enhanced Instagram clone built on top of the Albumy framework. Added LLM-powered alternative text generation for every uploaded image to improve accessibility for visually impaired users, and AI-driven caption suggestions that users can accept or edit.\n\nThe accessibility layer uses a vision-language model to generate descriptive alt-text automatically on upload. The caption suggestion system analyzes image content and context to propose relevant, engaging captions.",
+    stack:["Python","PyTorch","Hugging Face","Flask","MongoDB","OpenAI API"],
+    github:"https://github.com/shriyapeddakama/AlbumyML",
+    demo:null
+  },
+  {
+    id:"book", emoji:"📚", title:"Book Peek App",
+    tags:["Android","Analytics","Java"],
+    thumb:"linear-gradient(135deg,#209090,#106060)",
+    short:"Android app with real-time book analytics.",
+    desc:"A native Android app with a Java backend that lets users search for books via the Open Library API and view detailed information, reading analytics, and popularity trends in real time.\n\nThe backend logs all user interactions to MongoDB, which feeds a web dashboard showing search trends, popular titles, and reading pattern analytics. The app features a clean search UI, detailed book pages, and a live analytics view.",
+    stack:["Java","Android","MongoDB","Open Library API","Shell","JSON"],
+    github:"https://github.com/shriyapeddakama/Book-Peek-App",
+    demo:null
+  },
+  {
+    id:"retinopathy", emoji:"🏥", title:"Diabetic Retinopathy Detection",
+    tags:["AI","Healthcare","Explainability"],
+    thumb:"linear-gradient(135deg,#2060c0,#104080)",
+    short:"Explainable ML for retinopathy screening.",
+    desc:"A machine learning system for smartphone-based diabetic retinopathy screening, with a strong focus on explainability. The project explores both global and local explainability methods to make model decisions transparent and trustworthy for clinical use.\n\nExplanations are tailored to two audiences: healthcare workers receive clinical-grade saliency maps and feature importance breakdowns, while patients receive plain-language explanations of what the model detected and why. Built with the goal of making AI-assisted diagnosis accessible in low-resource settings.",
+    stack:["Python","PyTorch","LIME","SHAP","Jupyter","Scikit-learn"],
+    github:"https://github.com/shriyapeddakama/DiabeticRetinopathyDetection",
+    demo:null
+  }
+];
+
+const RESUME = `SHRIYA PEDDAKAMA
+shriyapeddakama@gmail.com
+linkedin.com/in/shriyapeddakama
+github.com/shriyapeddakama
+She/Her
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDUCATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Carnegie Mellon University
+Master of Science                          2023 – 2025
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXPERIENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Northwest Bancshares — Data Scientist (Capstone)
+Pittsburgh · Aug 2025 – Dec 2025
+• Leveraged OCR, SQL-style transformations, and Python
+  to clean and validate complex financial statement data.
+• Built KPI-driven dashboards reducing manual review
+  time by 90% and improving data accuracy for
+  underwriting teams.
+
+Amazon — Data Engineer
+Hyderabad · Aug 2021 – Jan 2023
+• Built scalable Redshift/S3/ETL pipelines for Supply
+  Chain Optimization Technologies (SCOT).
+• Led Project Stopwatch competitor benchmarking system
+  → 55% faster processing.
+• Supported forecast analytics for UAE, Netherlands,
+  Egypt, and Turkey marketplaces.
+
+Amazon — Data Engineer Intern
+Hyderabad · Jan 2021 – Jul 2021
+• Designed backend for Goanna analytics tool
+  (200+ monthly users) for anomaly detection.
+• Improved pipeline efficiency by 35%.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SKILLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Languages:   Python, SQL, Java, Shell
+Data & ML:   Spark, Kafka, Hadoop, PyTorch, Jupyter
+Cloud:       AWS, Azure, GCP, Docker, Kubernetes
+Databases:   PostgreSQL, MySQL, MongoDB,
+             Snowflake, Redshift
+Tools:       Git, GitHub, Power BI, Tableau, VS Code
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROJECTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Movie Recommender System
+  Netflix-style ML rec engine with A/B testing,
+  monitoring and retraining pipelines.
+
+AlbumyML
+  Instagram clone with LLM-powered alt-text
+  generation and AI caption suggestions.
+
+Book Peek App
+  Android app with MongoDB logging and
+  real-time book analytics dashboard.
+
+Diabetic Retinopathy Detection
+  Explainability-focused ML screening system
+  for healthcare workers and patients.`;
+
+// ── RENDER ────────────────────────────────────────────
+function renderSkills() {
+  const el = document.getElementById('skills-list');
+  el.innerHTML = SKILLS.map(s => `
+    <div class="skill-cat">
+      <div class="skill-cat-header">
+        <span class="skill-cat-icon">${s.icon}</span>
+        <span class="skill-cat-name">${s.cat}</span>
+      </div>
+      <div class="skill-tags">${s.items.map(i=>`<span class="skill-tag">${i}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function renderExp() {
+  const el = document.getElementById('exp-body');
+  el.innerHTML = '<div class="acc-bar"></div><div class="sec-title">Work Experience</div>' +
+    EXP.map(e => `
+    <div class="exp-card">
+      <div class="exp-top">
+        <span class="exp-emoji">${e.emoji}</span>
+        <div>
+          <div class="exp-company">${e.company}</div>
+          <div class="exp-role">${e.role}</div>
+          <div class="exp-meta">${e.meta}</div>
+        </div>
+      </div>
+      <ul class="exp-bullets">${e.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+
+function renderProjects() {
+  const el = document.getElementById('proj-grid');
+  el.innerHTML = PROJECTS.map(p => `
+    <div class="proj-card" onclick="openProjDetail('${p.id}')">
+      <div class="proj-thumb" style="background:${p.thumb}">${p.emoji}</div>
+      <div class="proj-info">
+        <div class="proj-title">${p.title}</div>
+        ${p.tags.map(t=>`<span class="proj-tag" style="margin-right:4px">${t}</span>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function renderResume() {
+  document.getElementById('resume-txt').textContent = RESUME;
+}
+
+// ── WINDOWS ───────────────────────────────────────────
+const winOrder = {};
+let zTop = 100;
+
+function openWindow(id) {
+  const el = document.getElementById('win-'+id);
+  if (!el) return;
+  el.classList.add('active');
+  bringToFront(id);
+  updateTabs();
+}
+
+function closeWindow(id) {
+  const el = document.getElementById('win-'+id);
+  if (!el) return;
+  el.classList.remove('active');
+  updateTabs();
+}
+
+function bringToFront(id) {
+  const el = document.getElementById('win-'+id);
+  if (!el) return;
+  zTop++;
+  el.style.zIndex = zTop;
+}
+
+function updateTabs() {
+  const tabs = document.getElementById('tb-tabs');
+  const wins = {
+    profile:'🖥️ profile', about:'📄 about', skills:'🔧 skills',
+    exp:'💼 experience', projects:'📁 projects', resume:'📄 resume', contact:'✉️ contact'
+  };
+  tabs.innerHTML = Object.entries(wins).filter(([id])=>{
+    const el = document.getElementById('win-'+id);
+    return el && el.classList.contains('active');
+  }).map(([id,label])=>
+    `<div class="tb-tab active" onclick="bringToFront('${id}')">${label}</div>`
+  ).join('');
+}
+
+// ── DRAGGABLE ─────────────────────────────────────────
+document.querySelectorAll('.win-bar[data-win]').forEach(bar => {
+  const id = bar.dataset.win;
+  const win = document.getElementById('win-'+id);
+  let dragging=false, ox=0, oy=0;
+  bar.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('wb')) return;
+    dragging=true;
+    const r = win.getBoundingClientRect();
+    ox = e.clientX - r.left; oy = e.clientY - r.top;
+    win.style.transform='none';
+    bringToFront(id);
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    win.style.left = (e.clientX - ox)+'px';
+    win.style.top  = (e.clientY - oy)+'px';
+  });
+  document.addEventListener('mouseup', () => dragging=false);
+  win.addEventListener('mousedown', () => bringToFront(id));
+});
+
+// ── PROJECT DETAIL ────────────────────────────────────
+function openProjDetail(id) {
+  const p = PROJECTS.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('pd-win-title').textContent = `C:\\SHRIYA\\projects\\${p.id}`;
+  document.getElementById('pd-thumb').style.background = p.thumb;
+  document.getElementById('pd-thumb').textContent = p.emoji;
+  document.getElementById('pd-title').textContent = p.title;
+  document.getElementById('pd-tags').innerHTML = p.tags.map(t=>`<span class="pd-tag">${t}</span>`).join('');
+  document.getElementById('pd-desc').innerHTML = p.desc.replace(/\n\n/g,'<br><br>');
+  document.getElementById('pd-stack').innerHTML = p.stack.map(s=>`<span>${s}</span>`).join('');
+  document.getElementById('pd-links').innerHTML =
+    `<a class="pd-link gh-l" href="${p.github}" target="_blank">🐙 View on GitHub</a>` +
+    (p.demo ? `<a class="pd-link demo-l" href="${p.demo}" target="_blank">🚀 Live Demo</a>` : '');
+  document.getElementById('proj-overlay').classList.add('open');
+}
+
+function closeProjDetail(e) {
+  if (!e || e.target===document.getElementById('proj-overlay'))
+    document.getElementById('proj-overlay').classList.remove('open');
+}
+
+// ── RESUME DOWNLOAD ───────────────────────────────────
+function downloadResume() {
+  const blob = new Blob([RESUME], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Shriya_Peddakama_Resume.txt';
+  a.click();
+}
+
+// ── AVATAR INTERACTIONS ───────────────────────────────
+const avatarWrap = document.getElementById('avatar-wrap');
+const pupilL = document.getElementById('pupil-l');
+const pupilR = document.getElementById('pupil-r');
+const shineL = document.getElementById('shine-l');
+const shineR = document.getElementById('shine-r');
+const mouth  = document.getElementById('avatar-mouth');
+const waveArm= document.getElementById('wave-arm');
+
+// eye tracking
+document.addEventListener('mousemove', e => {
+  const rect = avatarWrap.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top  + rect.height/2;
+  const dx = e.clientX - cx, dy = e.clientY - cy;
+  const dist = Math.sqrt(dx*dx+dy*dy);
+  const maxR = 3.5;
+
+  // left eye center: 77,122; right: 123,122 in SVG coords (200x220)
+  function movePupil(pupil, shine, svgCx, svgCy) {
+    const angle = Math.atan2(dy, dx);
+    const r = Math.min(maxR, dist/50);
+    const px = svgCx + Math.cos(angle)*r;
+    const py = svgCy + Math.sin(angle)*r;
+    pupil.setAttribute('cx', px);
+    pupil.setAttribute('cy', py);
+    shine.setAttribute('cx', px+2);
+    shine.setAttribute('cy', py-2);
+  }
+  movePupil(pupilL, shineL, 77, 122);
+  movePupil(pupilR, shineR, 123, 122);
+
+  // smile wider when near
+  const nearDist = Math.min(dist, 400);
+  const smile = 151 + (1 - nearDist/400)*8;
+  mouth.setAttribute('d',
+    `M88 146 C93 ${smile},107 ${smile},112 146`);
+});
+
+// wave on load
+let waveAngle = 0, waveDir = 1;
+const waveInterval = setInterval(() => {
+  waveAngle += 8 * waveDir;
+  if (waveAngle > 25 || waveAngle < -5) waveDir *= -1;
+  waveArm.setAttribute('transform', `rotate(${waveAngle}, 140, 195)`);
+}, 60);
+setTimeout(()=> clearInterval(waveInterval), 3500);
+
+// blink randomly
+function blink() {
+  const eyeL = document.getElementById('eye-l-white');
+  const eyeR = document.getElementById('eye-r-white');
+  [eyeL,eyeR,pupilL,pupilR,shineL,shineR].forEach(el=>el.style.display='none');
+  setTimeout(()=>{
+    [eyeL,eyeR,pupilL,pupilR,shineL,shineR].forEach(el=>el.style.display='');
+  }, 120);
+}
+function scheduleBlink() {
+  setTimeout(()=>{ blink(); scheduleBlink(); }, 2000 + Math.random()*4000);
+}
+scheduleBlink();
+
+// click bounce
+function avatarClick() {
+  avatarWrap.style.animation='none';
+  avatarWrap.style.transform='scale(1.15) translateY(-8px)';
+  setTimeout(()=>{ avatarWrap.style.transform='scale(1) translateY(0)';
+    avatarWrap.style.transition='transform .3s cubic-bezier(.3,1.5,.5,1)'; }, 80);
+  setTimeout(()=>{ avatarWrap.style.transition=''; },400);
+}
+
+// ── CLOCK ─────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes();
+  const ap = h>=12?'PM':'AM'; h=h%12||12;
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('clock').innerHTML =
+    `<div>${h}:${String(m).padStart(2,'0')} ${ap}</div>
+     <div style="font-size:9px;opacity:.7">${days[now.getDay()]} ${now.getMonth()+1}/${now.getDate()}/${now.getFullYear()}</div>`;
+}
+updateClock(); setInterval(updateClock, 1000);
+
+// ── INIT ──────────────────────────────────────────────
+renderSkills();
+renderExp();
+renderProjects();
+renderResume();
+updateTabs();
+</script>
+</body>
+</html>
