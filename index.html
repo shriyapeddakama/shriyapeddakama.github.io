@@ -62,10 +62,12 @@ body::before{content:'';position:fixed;inset:0;
 .icon-col{position:absolute;top:80px;display:flex;flex-direction:column;gap:18px;align-items:center}
 #col-left{left:16px}
 #col-right{right:16px}
-.desk-icon{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;width:80px;
-  padding:6px;border-radius:6px;transition:background .15s}
+.desk-icon{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;width:80px;
+  padding:6px;border-radius:6px;transition:background .15s;position:absolute;user-select:none}
+.desk-icon:active{cursor:grabbing}
+.desk-icon.selected{background:rgba(90,110,58,.25)}
 .desk-icon:hover{background:rgba(90,110,58,.18)}
-.desk-icon:hover .di-label{background:rgba(90,110,58,.5);border-radius:3px}
+.desk-icon:hover .di-label,.desk-icon.selected .di-label{background:rgba(90,110,58,.5);border-radius:3px}
 .di-img{font-size:42px;line-height:1;transition:transform .15s;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
 .desk-icon:hover .di-img{transform:scale(1.1)}
 .di-label{font-size:11px;font-weight:700;text-align:center;padding:2px 5px;color:var(--text);
@@ -95,7 +97,7 @@ body::before{content:'';position:fixed;inset:0;
 /* profile window */
 #win-profile{top:90px;left:50%;transform:translateX(-50%);width:560px}
 .profile-card{display:flex;align-items:center;gap:22px}
-#avatar-wrap{width:140px;height:140px;flex-shrink:0;position:relative;cursor:pointer}
+#avatar-wrap{width:170px;height:170px;flex-shrink:0;position:relative;cursor:pointer;border-radius:50%;overflow:hidden;border:3px solid #c8a068;box-shadow:0 4px 16px rgba(0,0,0,.18);background:#fff}
 #avatar-wrap svg{width:100%;height:100%}
 .profile-info .hi{font-size:13px;color:#666;font-weight:600;margin-bottom:2px}
 .profile-info .name{font-size:28px;font-weight:800;color:var(--orange);line-height:1.15;margin-bottom:4px}
@@ -193,6 +195,12 @@ body::before{content:'';position:fixed;inset:0;
 
 /* draggable */
 .win{user-select:none}
+/* minimized: show only titlebar */
+.win.minimized .win-body{display:none}
+/* maximized: fill desktop */
+.win.maximized{top:0!important;left:0!important;right:0!important;bottom:0!important;
+  width:100%!important;border-radius:0;transform:none!important}
+.win.maximized .win-body{max-height:calc(100vh - 88px)}
 
 /* scrollbar */
 ::-webkit-scrollbar{width:6px}
@@ -232,36 +240,32 @@ body::before{content:'';position:fixed;inset:0;
     <a class="soc-btn s-re" href="#" onclick="openWindow('resume');return false" title="Resume">📄</a>
   </div>
 
-  <!-- Left icons -->
-  <div class="icon-col" id="col-left">
-    <div class="desk-icon" onclick="openWindow('profile')">
-      <div class="di-img"><div class="h-tile">S</div></div>
-      <span class="di-label">profile</span>
+  <!-- Desktop icons — all absolutely positioned, draggable -->
+  <div class="desk-icon" id="icon-profile" data-action="openWindow('profile')" style="left:20px;top:90px" ondblclick="openWindow('profile')">
+    <div class="di-img">
+      <svg width="52" height="52" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" fill="none" style="border-radius:50%;overflow:hidden;filter:drop-shadow(0 2px 5px rgba(0,0,0,.25));background:#fff"><mask id="m2"><rect width="280" height="280" fill="#fff"/></mask><g mask="url(#m2)"><g transform="translate(8)"><path d="M132 36a56 56 0 0 0-56 56v6.17A12 12 0 0 0 66 110v14a12 12 0 0 0 10.3 11.88 56.04 56.04 0 0 0 31.7 44.73v18.4h-4a72 72 0 0 0-72 72v9h200v-9a72 72 0 0 0-72-72h-4v-18.39a56.04 56.04 0 0 0 31.7-44.73A12 12 0 0 0 198 124v-14a12 12 0 0 0-10-11.83V92a56 56 0 0 0-56-56Z" fill="#d08b5b"/><g transform="translate(0 170)"><path d="M100.37 29.14a27.6 27.6 0 0 1 7.63-7.57v15.3c0 5.83 3.98 10.98 10.08 14.13l-.08.06.9 2.86c3.89 2 8.35 3.13 13.1 3.13s9.21-1.13 13.1-3.13l.9-2.86-.08-.06c6.1-3.15 10.08-8.3 10.08-14.12v-14.6a27.1 27.1 0 0 1 6.6 6.82 72 72 0 0 1 69.4 71.95V110H32v-8.95a72 72 0 0 1 68.37-71.9Z" fill="#262e33"/></g><g transform="translate(78 134)"><path d="M40 16c0 5.37 6.16 9 14 9s14-3.63 14-9c0-1.1-.95-2-2-2-1.3 0-1.87.9-2 2-1.24 2.94-4.32 4.72-10 5-5.68-.28-8.76-2.06-10-5-.13-1.1-.7-2-2-2-1.05 0-2 .9-2 2Z" fill="#000" fill-opacity=".6"/></g><g transform="translate(76 90)"><path d="M36 22a6 6 0 1 1-12 0 6 6 0 0 1 12 0ZM88 22a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z" fill="#000" fill-opacity=".6"/></g><g transform="translate(76 82)"><path d="M26.55 6.15c-5.8.27-15.2 4.49-14.96 10.34.01.18.3.27.43.12 2.76-2.96 22.32-5.95 29.2-4.36.64.14 1.12-.48.72-.93-3.43-3.85-10.2-5.43-15.4-5.18ZM86.45 6.15c5.8.27 15.2 4.49 14.96 10.34-.01.18-.3.27-.43.12-2.76-2.96-22.32-5.95-29.2-4.36-.64.14-1.12-.48-.72-.93 3.43-3.85 10.2-5.43 15.4-5.18Z" fill-rule="evenodd" clip-rule="evenodd" fill="#000" fill-opacity=".6"/></g><g transform="translate(-1)"><path d="M67 113c10.86-22.7 34.67-31.6 55.44-39.36 13.32-4.97 25.39-9.48 32-16.86 2.22 2.02 4.75 4.05 7.41 6.2C172.06 71.16 184.21 80.91 189 98v.17a12 12 0 0 1 9.81 9.72V86.04c0-1.3-.05-2.57-.15-3.84 4.54-17-3.1-37.78-12.66-47.2-9.48-8.82-22.3-12.32-30.95-8.48C143.45 8.98 109.9 13.24 90 28c-13.22 9.8-24.79 25.72-27.84 45.75A46.18 46.18 0 0 0 61 84.05v88.5c-.2 31.5-7.4 82.49-21 90.45 62.36 16.8 71.93-38.15 69-82v-.39a56.03 56.03 0 0 1-31.8-45.74A12 12 0 0 1 67 123v-10Z" fill="#724133"/></g><g transform="translate(62 42)"><path fill-rule="evenodd" clip-rule="evenodd" d="M40 94a24 24 0 0 1-22.96-31H10.5a2.5 2.5 0 0 1 0-5h8c.23 0 .45.03.66.09a24 24 0 0 1 42.26 1.06A11.36 11.36 0 0 1 70.86 54c4.01 0 7.55 2.14 9.6 5.4a24 24 0 0 1 42.38-1.31c.2-.06.43-.1.66-.1h8a2.5 2.5 0 1 1 0 5h-6.54a24 24 0 1 1-46.6 2.84c-.08-4.37-3.45-7.83-7.5-7.83-3.73 0-6.89 2.94-7.42 6.83A24 24 0 0 1 40 94Zm0-4a20 20 0 1 0 0-40 20 20 0 0 0 0 40Zm82-20a20 20 0 1 1-40 0 20 20 0 0 1 40 0Z" fill="#262e33"/></g></g></g></svg>
     </div>
-    <div class="desk-icon" onclick="openWindow('exp')">
-      <div class="di-img">📁</div>
-      <span class="di-label">experience</span>
-    </div>
-    <div class="desk-icon" onclick="openWindow('projects')">
-      <div class="di-img">📁</div>
-      <span class="di-label">projects</span>
-    </div>
+    <span class="di-label">profile</span>
   </div>
-
-  <!-- Right icons -->
-  <div class="icon-col" id="col-right">
-    <div class="desk-icon" onclick="openWindow('skills')">
-      <div class="di-img">📁</div>
-      <span class="di-label">skills</span>
-    </div>
-    <div class="desk-icon" onclick="openWindow('contact')">
-      <div class="di-img">📁</div>
-      <span class="di-label">contact</span>
-    </div>
-    <div class="desk-icon" onclick="openWindow('resume')">
-      <div class="di-img">📁</div>
-      <span class="di-label">resume</span>
-    </div>
+  <div class="desk-icon" id="icon-exp" data-action="openWindow('exp')" style="left:20px;top:200px" ondblclick="openWindow('exp')">
+    <div class="di-img">📁</div>
+    <span class="di-label">experience</span>
+  </div>
+  <div class="desk-icon" id="icon-projects" data-action="openWindow('projects')" style="left:20px;top:310px" ondblclick="openWindow('projects')">
+    <div class="di-img">📁</div>
+    <span class="di-label">projects</span>
+  </div>
+  <div class="desk-icon" id="icon-skills" style="right:20px;top:90px" ondblclick="openWindow('skills')">
+    <div class="di-img">📁</div>
+    <span class="di-label">skills</span>
+  </div>
+  <div class="desk-icon" id="icon-contact" style="right:20px;top:200px" ondblclick="openWindow('contact')">
+    <div class="di-img">📁</div>
+    <span class="di-label">contact</span>
+  </div>
+  <div class="desk-icon" id="icon-resume" style="right:20px;top:310px" ondblclick="openWindow('resume')">
+    <div class="di-img">📁</div>
+    <span class="di-label">resume</span>
   </div>
 
   <!-- ══ PROFILE WINDOW ══ -->
@@ -269,69 +273,15 @@ body::before{content:'';position:fixed;inset:0;
     <div class="win-bar" data-win="profile">
       <span class="win-title">C:\SHRIYA\profile</span>
       <div class="win-btns">
-        <div class="wb wb-min" onclick="closeWindow('profile')">─</div>
-        <div class="wb wb-max">□</div>
+        <div class="wb wb-min" onclick="minimizeWindow('profile')" title="Minimize">─</div>
+        <div class="wb wb-max" onclick="maximizeWindow('profile')" title="Maximize">□</div>
         <div class="wb wb-cls" onclick="closeWindow('profile')">✕</div>
       </div>
     </div>
     <div class="win-body">
       <div class="profile-card">
         <div id="avatar-wrap" onclick="avatarClick()">
-          <svg id="avatar-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg" fill="none">
-            <!-- bg circle -->
-            <circle cx="100" cy="110" r="95" fill="#e8dfc8"/>
-            <!-- hair back -->
-            <ellipse cx="100" cy="100" rx="58" ry="66" fill="#1a1a1a"/>
-            <!-- bob shape bottom -->
-            <path d="M44 108 C42 140,50 165,72 172 C84 162,100 158,116 162 C138 166,156 150,158 132 C160 118,156 105,152 95 C148 108,140 120,128 126 C116 132,100 134,84 130 C68 126,52 116,44 108Z" fill="#1a1a1a"/>
-            <!-- face -->
-            <ellipse cx="100" cy="118" rx="50" ry="54" fill="#f5c9a0"/>
-            <!-- ears -->
-            <ellipse cx="50" cy="118" rx="9" ry="11" fill="#f5c9a0"/>
-            <ellipse cx="150" cy="118" rx="9" ry="11" fill="#1a1a1a"/>
-            <ellipse cx="150" cy="118" rx="6" ry="8" fill="#f5c9a0"/>
-            <!-- neck -->
-            <rect x="88" y="162" width="24" height="22" rx="7" fill="#f5c9a0"/>
-            <!-- shoulders -->
-            <path d="M30 220 C30 195,60 180,100 178 C140 180,170 195,170 220Z" fill="#5a6e3a"/>
-            <!-- collar -->
-            <path d="M88 178 L100 195 L112 178Z" fill="#f5f0e5"/>
-            <!-- hair bangs -->
-            <path d="M48 98 C52 68,72 52,100 50 C128 52,148 68,152 98 C146 80,128 68,100 66 C72 68,54 80,48 98Z" fill="#111"/>
-            <!-- glasses left -->
-            <rect id="gl-l" x="60" y="110" width="34" height="24" rx="9" fill="none" stroke="#1a1a1a" stroke-width="3.5"/>
-            <!-- glasses right -->
-            <rect id="gl-r" x="106" y="110" width="34" height="24" rx="9" fill="none" stroke="#1a1a1a" stroke-width="3.5"/>
-            <!-- bridge -->
-            <line x1="94" y1="122" x2="106" y2="122" stroke="#1a1a1a" stroke-width="3"/>
-            <!-- arms -->
-            <line x1="60" y1="122" x2="50" y2="120" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
-            <line x1="140" y1="122" x2="150" y2="120" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/>
-            <!-- eyebrows -->
-            <path d="M64 107 C70 104,78 103,86 105" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <path d="M114 105 C122 103,130 104,136 107" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <!-- eye whites -->
-            <ellipse id="eye-l-white" cx="77" cy="122" rx="10" ry="8" fill="white"/>
-            <ellipse id="eye-r-white" cx="123" cy="122" rx="10" ry="8" fill="white"/>
-            <!-- pupils (moved by JS) -->
-            <circle id="pupil-l" cx="77" cy="122" r="4" fill="#1a1a1a"/>
-            <circle id="pupil-r" cx="123" cy="122" r="4" fill="#1a1a1a"/>
-            <!-- eye shine -->
-            <circle id="shine-l" cx="79" cy="120" r="1.5" fill="white"/>
-            <circle id="shine-r" cx="125" cy="120" r="1.5" fill="white"/>
-            <!-- nose -->
-            <circle cx="100" cy="136" r="3" fill="#e8a880"/>
-            <!-- mouth (changes with JS) -->
-            <path id="avatar-mouth" d="M88 146 C93 151,107 151,112 146" stroke="#c07050" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <!-- blush -->
-            <ellipse cx="68" cy="138" rx="10" ry="6" fill="#f0a0a0" opacity="0.4"/>
-            <ellipse cx="132" cy="138" rx="10" ry="6" fill="#f0a0a0" opacity="0.4"/>
-            <!-- wave arm (animated) -->
-            <g id="wave-arm">
-              <line x1="140" y1="195" x2="165" y2="175" stroke="#5a6e3a" stroke-width="10" stroke-linecap="round"/>
-              <ellipse cx="170" cy="170" rx="10" ry="12" fill="#f5c9a0" stroke="#1a1a1a" stroke-width="2"/>
-            </g>
-          </svg>
+          <svg id="avatar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" fill="none" shape-rendering="auto"><mask id="viewboxMask"><rect width="280" height="280" rx="0" ry="0" x="0" y="0" fill="#fff" /></mask><g mask="url(#viewboxMask)"><g transform="translate(8)"><path d="M132 36a56 56 0 0 0-56 56v6.17A12 12 0 0 0 66 110v14a12 12 0 0 0 10.3 11.88 56.04 56.04 0 0 0 31.7 44.73v18.4h-4a72 72 0 0 0-72 72v9h200v-9a72 72 0 0 0-72-72h-4v-18.39a56.04 56.04 0 0 0 31.7-44.73A12 12 0 0 0 198 124v-14a12 12 0 0 0-10-11.83V92a56 56 0 0 0-56-56Z" fill="#d08b5b"/><path d="M108 180.61v8a55.79 55.79 0 0 0 24 5.39c8.59 0 16.73-1.93 24-5.39v-8a55.79 55.79 0 0 1-24 5.39 55.79 55.79 0 0 1-24-5.39Z" fill="#000" fill-opacity=".1"/><g transform="translate(0 170)"><path d="M100.37 29.14a27.6 27.6 0 0 1 7.63-7.57v15.3c0 5.83 3.98 10.98 10.08 14.13l-.08.06.9 2.86c3.89 2 8.35 3.13 13.1 3.13s9.21-1.13 13.1-3.13l.9-2.86-.08-.06c6.1-3.15 10.08-8.3 10.08-14.12v-14.6a27.1 27.1 0 0 1 6.6 6.82 72 72 0 0 1 69.4 71.95V110H32v-8.95a72 72 0 0 1 68.37-71.9Z" fill="#262e33"/><path d="M108 21.57c-6.77 4.6-11 11.17-11 18.46 0 7.4 4.36 14.05 11.3 18.66l6.12-4.81 4.58.33-1-3.15.08-.06c-6.1-3.15-10.08-8.3-10.08-14.12v-15.3ZM156 36.88c0 5.82-3.98 10.97-10.08 14.12l.08.06-1 3.15 4.58-.33 5.65 4.45c6.63-4.6 10.77-11.1 10.77-18.3 0-6.92-3.82-13.2-10-17.75v14.6Z" fill="#fff" fill-opacity=".75"/></g><g transform="translate(78 134)"><path d="M40 16c0 5.37 6.16 9 14 9s14-3.63 14-9c0-1.1-.95-2-2-2-1.3 0-1.87.9-2 2-1.24 2.94-4.32 4.72-10 5-5.68-.28-8.76-2.06-10-5-.13-1.1-.7-2-2-2-1.05 0-2 .9-2 2Z" fill="#000" fill-opacity=".6"/><g transform="translate(26 -12)"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 8c0 4.42 5.37 8 12 8s12-3.58 12-8" fill="#000" fill-opacity=".16"/></g></g><g transform="translate(76 90)"><path d="M36 22a6 6 0 1 1-12 0 6 6 0 0 1 12 0ZM88 22a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z" fill="#000" fill-opacity=".6"/></g><g transform="translate(76 82)"><path d="M26.55 6.15c-5.8.27-15.2 4.49-14.96 10.34.01.18.3.27.43.12 2.76-2.96 22.32-5.95 29.2-4.36.64.14 1.12-.48.72-.93-3.43-3.85-10.2-5.43-15.4-5.18ZM86.45 6.15c5.8.27 15.2 4.49 14.96 10.34-.01.18-.3.27-.43.12-2.76-2.96-22.32-5.95-29.2-4.36-.64.14-1.12-.48-.72-.93 3.43-3.85 10.2-5.43 15.4-5.18Z" fill-rule="evenodd" clip-rule="evenodd" fill="#000" fill-opacity=".6"/></g><g transform="translate(-1)"><path d="M67 113c10.86-22.7 34.67-31.6 55.44-39.36 13.32-4.97 25.39-9.48 32-16.86 2.22 2.02 4.75 4.05 7.41 6.2C172.06 71.16 184.21 80.91 189 98v.17a12 12 0 0 1 9.81 9.72V86.04c0-1.3-.05-2.57-.15-3.84 4.54-17-3.1-37.78-12.66-47.2-9.48-8.82-22.3-12.32-30.95-8.48C143.45 8.98 109.9 13.24 90 28c-13.22 9.8-24.79 25.72-27.84 45.75A46.18 46.18 0 0 0 61 84.05v88.5c-.2 31.5-7.4 82.49-21 90.45 62.36 16.8 71.93-38.15 69-82v-.39a56.03 56.03 0 0 1-31.8-45.74A12 12 0 0 1 67 123v-10ZM157 180.61a56.03 56.03 0 0 0 31.8-45.74 12 12 0 0 0 10.01-9.76v1.36A100 100 0 0 0 209.78 172l26.95 52.71a37.79 37.79 0 0 1-3.94 40.76A72 72 0 0 0 161 199h-4v-18.39Z" fill="#724133"/></g><g transform="translate(62 42)"><g fill-rule="evenodd" clip-rule="evenodd"><path d="M40 94a24 24 0 0 1-22.96-31H10.5a2.5 2.5 0 0 1 0-5h8c.23 0 .45.03.66.09a24 24 0 0 1 42.26 1.06A11.36 11.36 0 0 1 70.86 54c4.01 0 7.55 2.14 9.6 5.4a24 24 0 0 1 42.38-1.31c.2-.06.43-.1.66-.1h8a2.5 2.5 0 1 1 0 5h-6.54a24 24 0 1 1-46.6 2.84c-.08-4.37-3.45-7.83-7.5-7.83-3.73 0-6.89 2.94-7.42 6.83A24 24 0 0 1 40 94Zm0-4a20 20 0 1 0 0-40 20 20 0 0 0 0 40Zm82-20a20 20 0 1 1-40 0 20 20 0 0 1 40 0Z" fill="#262e33"/></g></g></g></g></svg>
         </div>
         <div class="profile-info">
           <div class="hi">hi! i'm</div>
@@ -349,8 +299,8 @@ body::before{content:'';position:fixed;inset:0;
     <div class="win-bar" data-win="about">
       <span class="win-title">C:\SHRIYA\about</span>
       <div class="win-btns">
-        <div class="wb wb-min" onclick="closeWindow('about')">─</div>
-        <div class="wb wb-max">□</div>
+        <div class="wb wb-min" onclick="minimizeWindow('about')" title="Minimize">─</div>
+        <div class="wb wb-max" onclick="maximizeWindow('about')" title="Maximize">□</div>
         <div class="wb wb-cls" onclick="closeWindow('about')">✕</div>
       </div>
     </div>
@@ -364,8 +314,8 @@ body::before{content:'';position:fixed;inset:0;
     <div class="win-bar" data-win="skills">
       <span class="win-title">C:\SHRIYA\skills</span>
       <div class="win-btns">
-        <div class="wb wb-min" onclick="closeWindow('skills')">─</div>
-        <div class="wb wb-max">□</div>
+        <div class="wb wb-min" onclick="minimizeWindow('skills')" title="Minimize">─</div>
+        <div class="wb wb-max" onclick="maximizeWindow('skills')" title="Maximize">□</div>
         <div class="wb wb-cls" onclick="closeWindow('skills')">✕</div>
       </div>
     </div>
@@ -381,8 +331,8 @@ body::before{content:'';position:fixed;inset:0;
     <div class="win-bar" data-win="exp">
       <span class="win-title">C:\SHRIYA\experience</span>
       <div class="win-btns">
-        <div class="wb wb-min" onclick="closeWindow('exp')">─</div>
-        <div class="wb wb-max">□</div>
+        <div class="wb wb-min" onclick="minimizeWindow('exp')" title="Minimize">─</div>
+        <div class="wb wb-max" onclick="maximizeWindow('exp')" title="Maximize">□</div>
         <div class="wb wb-cls" onclick="closeWindow('exp')">✕</div>
       </div>
     </div>
@@ -394,8 +344,8 @@ body::before{content:'';position:fixed;inset:0;
     <div class="win-bar" data-win="projects">
       <span class="win-title">C:\SHRIYA\projects</span>
       <div class="win-btns">
-        <div class="wb wb-min" onclick="closeWindow('projects')">─</div>
-        <div class="wb wb-max">□</div>
+        <div class="wb wb-min" onclick="minimizeWindow('projects')" title="Minimize">─</div>
+        <div class="wb wb-max" onclick="maximizeWindow('projects')" title="Maximize">□</div>
         <div class="wb wb-cls" onclick="closeWindow('projects')">✕</div>
       </div>
     </div>
@@ -409,16 +359,37 @@ body::before{content:'';position:fixed;inset:0;
   <!-- ══ RESUME WINDOW ══ -->
   <div class="win" id="win-resume">
     <div class="win-bar" data-win="resume">
-      <span class="win-title">C:\SHRIYA\resume.txt</span>
+      <span class="win-title">C:\SHRIYA\resume.docx</span>
       <div class="win-btns">
-        <div class="wb wb-min" onclick="closeWindow('resume')">─</div>
-        <div class="wb wb-max">□</div>
+        <div class="wb wb-min" onclick="minimizeWindow('resume')" title="Minimize">─</div>
+        <div class="wb wb-max" onclick="maximizeWindow('resume')" title="Maximize">□</div>
         <div class="wb wb-cls" onclick="closeWindow('resume')">✕</div>
       </div>
     </div>
     <div class="win-body">
-      <div class="resume-dl"><button onclick="downloadResume()">💾 Save As...</button></div>
-      <div class="resume-terminal" id="resume-txt"></div>
+      <div style="text-align:center;padding:24px 0 12px">
+        <div style="font-size:48px;margin-bottom:12px">📄</div>
+        <div style="font-family:'VT323',monospace;font-size:20px;color:#3a4e22;margin-bottom:6px">Shriya_Peddakama_Resume.docx</div>
+        <div style="font-size:12px;color:#888;margin-bottom:22px">Microsoft Word Document</div>
+        <a id="resume-open-btn" href="resume.docx" target="_blank"
+          style="display:inline-flex;align-items:center;gap:8px;background:#5a6e3a;color:#fff;
+          border:none;border-radius:8px;padding:10px 22px;font-family:'Nunito',sans-serif;
+          font-weight:700;font-size:13px;cursor:pointer;text-decoration:none;margin-bottom:10px;
+          box-shadow:0 2px 8px rgba(0,0,0,.2)">
+          📂 Open Resume
+        </a>
+        <br>
+        <a id="resume-dl-btn" href="resume.docx" download="Shriya_Peddakama_Resume.docx"
+          style="display:inline-flex;align-items:center;gap:8px;background:#e07820;color:#fff;
+          border:none;border-radius:8px;padding:10px 22px;font-family:'Nunito',sans-serif;
+          font-weight:700;font-size:13px;cursor:pointer;text-decoration:none;
+          box-shadow:0 2px 8px rgba(0,0,0,.2)">
+          💾 Download .docx
+        </a>
+        <div style="margin-top:18px;font-size:11px;color:#aaa;font-style:italic">
+          Place your resume.docx in the same folder as index.html
+        </div>
+      </div>
     </div>
   </div>
 
@@ -427,8 +398,8 @@ body::before{content:'';position:fixed;inset:0;
     <div class="win-bar" data-win="contact">
       <span class="win-title">C:\SHRIYA\contact</span>
       <div class="win-btns">
-        <div class="wb wb-min" onclick="closeWindow('contact')">─</div>
-        <div class="wb wb-max">□</div>
+        <div class="wb wb-min" onclick="minimizeWindow('contact')" title="Minimize">─</div>
+        <div class="wb wb-max" onclick="maximizeWindow('contact')" title="Maximize">□</div>
         <div class="wb wb-cls" onclick="closeWindow('contact')">✕</div>
       </div>
     </div>
@@ -654,9 +625,7 @@ function renderProjects() {
     </div>`).join('');
 }
 
-function renderResume() {
-  document.getElementById('resume-txt').textContent = RESUME;
-}
+// resume rendered as file-open UI
 
 // ── WINDOWS ───────────────────────────────────────────
 const winOrder = {};
@@ -673,8 +642,34 @@ function openWindow(id) {
 function closeWindow(id) {
   const el = document.getElementById('win-'+id);
   if (!el) return;
-  el.classList.remove('active');
+  el.classList.remove('active','minimized','maximized');
   updateTabs();
+}
+
+function minimizeWindow(id) {
+  const el = document.getElementById('win-'+id);
+  if (!el) return;
+  if (el.classList.contains('minimized')) {
+    el.classList.remove('minimized'); // restore
+  } else {
+    el.classList.remove('maximized');
+    el.classList.add('minimized');
+  }
+  updateTabs();
+}
+
+function maximizeWindow(id) {
+  const el = document.getElementById('win-'+id);
+  if (!el) return;
+  if (el.classList.contains('maximized')) {
+    el.classList.remove('maximized'); // restore
+    el.style.width = '';
+  } else {
+    el.classList.remove('minimized');
+    el.classList.add('maximized');
+    el.style.width = '';
+  }
+  bringToFront(id);
 }
 
 function bringToFront(id) {
@@ -693,9 +688,11 @@ function updateTabs() {
   tabs.innerHTML = Object.entries(wins).filter(([id])=>{
     const el = document.getElementById('win-'+id);
     return el && el.classList.contains('active');
-  }).map(([id,label])=>
-    `<div class="tb-tab active" onclick="bringToFront('${id}')">${label}</div>`
-  ).join('');
+  }).map(([id,label])=>{
+    const el = document.getElementById('win-'+id);
+    const isMin = el && el.classList.contains('minimized');
+    return `<div class="tb-tab${isMin?'':' active'}" onclick="${isMin?`minimizeWindow('${id}')`:`bringToFront('${id}')`}" title="${isMin?'Click to restore':''}">${label}${isMin?' [_]':''}</div>`;
+  }).join('');
 }
 
 // ── DRAGGABLE ─────────────────────────────────────────
@@ -743,84 +740,19 @@ function closeProjDetail(e) {
     document.getElementById('proj-overlay').classList.remove('open');
 }
 
-// ── RESUME DOWNLOAD ───────────────────────────────────
-function downloadResume() {
-  const blob = new Blob([RESUME], {type:'text/plain'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'Shriya_Peddakama_Resume.txt';
-  a.click();
-}
+// Resume download handled via <a href="resume.docx"> links in HTML
 
-// ── AVATAR INTERACTIONS ───────────────────────────────
-const avatarWrap = document.getElementById('avatar-wrap');
-const pupilL = document.getElementById('pupil-l');
-const pupilR = document.getElementById('pupil-r');
-const shineL = document.getElementById('shine-l');
-const shineR = document.getElementById('shine-r');
-const mouth  = document.getElementById('avatar-mouth');
-const waveArm= document.getElementById('wave-arm');
-
-// eye tracking
-document.addEventListener('mousemove', e => {
-  const rect = avatarWrap.getBoundingClientRect();
-  const cx = rect.left + rect.width/2;
-  const cy = rect.top  + rect.height/2;
-  const dx = e.clientX - cx, dy = e.clientY - cy;
-  const dist = Math.sqrt(dx*dx+dy*dy);
-  const maxR = 3.5;
-
-  // left eye center: 77,122; right: 123,122 in SVG coords (200x220)
-  function movePupil(pupil, shine, svgCx, svgCy) {
-    const angle = Math.atan2(dy, dx);
-    const r = Math.min(maxR, dist/50);
-    const px = svgCx + Math.cos(angle)*r;
-    const py = svgCy + Math.sin(angle)*r;
-    pupil.setAttribute('cx', px);
-    pupil.setAttribute('cy', py);
-    shine.setAttribute('cx', px+2);
-    shine.setAttribute('cy', py-2);
-  }
-  movePupil(pupilL, shineL, 77, 122);
-  movePupil(pupilR, shineR, 123, 122);
-
-  // smile wider when near
-  const nearDist = Math.min(dist, 400);
-  const smile = 151 + (1 - nearDist/400)*8;
-  mouth.setAttribute('d',
-    `M88 146 C93 ${smile},107 ${smile},112 146`);
-});
-
-// wave on load
-let waveAngle = 0, waveDir = 1;
-const waveInterval = setInterval(() => {
-  waveAngle += 8 * waveDir;
-  if (waveAngle > 25 || waveAngle < -5) waveDir *= -1;
-  waveArm.setAttribute('transform', `rotate(${waveAngle}, 140, 195)`);
-}, 60);
-setTimeout(()=> clearInterval(waveInterval), 3500);
-
-// blink randomly
-function blink() {
-  const eyeL = document.getElementById('eye-l-white');
-  const eyeR = document.getElementById('eye-r-white');
-  [eyeL,eyeR,pupilL,pupilR,shineL,shineR].forEach(el=>el.style.display='none');
-  setTimeout(()=>{
-    [eyeL,eyeR,pupilL,pupilR,shineL,shineR].forEach(el=>el.style.display='');
-  }, 120);
-}
-function scheduleBlink() {
-  setTimeout(()=>{ blink(); scheduleBlink(); }, 2000 + Math.random()*4000);
-}
-scheduleBlink();
-
+// ── AVATAR ─────────────────────────────────────────
 // click bounce
 function avatarClick() {
-  avatarWrap.style.animation='none';
-  avatarWrap.style.transform='scale(1.15) translateY(-8px)';
-  setTimeout(()=>{ avatarWrap.style.transform='scale(1) translateY(0)';
-    avatarWrap.style.transition='transform .3s cubic-bezier(.3,1.5,.5,1)'; }, 80);
-  setTimeout(()=>{ avatarWrap.style.transition=''; },400);
+  const wrap = document.getElementById('avatar-wrap');
+  wrap.style.transition = 'transform .08s';
+  wrap.style.transform = 'scale(1.15) translateY(-8px)';
+  setTimeout(()=>{
+    wrap.style.transition = 'transform .3s cubic-bezier(.3,1.5,.5,1)';
+    wrap.style.transform = 'scale(1) translateY(0)';
+  }, 80);
+  setTimeout(()=>{ wrap.style.transition = ''; }, 400);
 }
 
 // ── CLOCK ─────────────────────────────────────────────
@@ -839,8 +771,65 @@ updateClock(); setInterval(updateClock, 1000);
 renderSkills();
 renderExp();
 renderProjects();
-renderResume();
 updateTabs();
+
+// ── DRAGGABLE DESKTOP ICONS ──────────────────────────
+(function() {
+  const desktop = document.getElementById('desktop');
+
+  document.querySelectorAll('.desk-icon').forEach(icon => {
+    let dragging = false, hasMoved = false, ox = 0, oy = 0;
+
+    function ensureLeftBased(el) {
+      if (el.style.right && el.style.right !== '') {
+        const rect = el.getBoundingClientRect();
+        const dRect = desktop.getBoundingClientRect();
+        el.style.left = (rect.left - dRect.left) + 'px';
+        el.style.top  = (rect.top  - dRect.top)  + 'px';
+        el.style.right = '';
+      }
+    }
+
+    icon.addEventListener('mousedown', e => {
+      if (e.button !== 0) return;
+      dragging = true; hasMoved = false;
+      ensureLeftBased(icon);
+      const rect = icon.getBoundingClientRect();
+      const dRect = desktop.getBoundingClientRect();
+      ox = e.clientX - (rect.left - dRect.left);
+      oy = e.clientY - (rect.top  - dRect.top);
+      icon.style.zIndex = 9990;
+      document.querySelectorAll('.desk-icon').forEach(i => i.classList.remove('selected'));
+      icon.classList.add('selected');
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const dRect = desktop.getBoundingClientRect();
+      const x = e.clientX - ox;
+      const y = e.clientY - oy;
+      const maxX = dRect.width  - icon.offsetWidth;
+      const maxY = dRect.height - icon.offsetHeight;
+      icon.style.left = Math.max(0, Math.min(x, maxX)) + 'px';
+      icon.style.top  = Math.max(0, Math.min(y, maxY)) + 'px';
+      if (Math.abs(e.movementX) + Math.abs(e.movementY) > 2) hasMoved = true;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      icon.style.zIndex = '';
+    });
+  });
+
+  // click desktop background = deselect icons
+  desktop.addEventListener('mousedown', e => {
+    if (!e.target.closest('.desk-icon')) {
+      document.querySelectorAll('.desk-icon').forEach(i => i.classList.remove('selected'));
+    }
+  });
+})();
 </script>
 </body>
 </html>
