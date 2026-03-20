@@ -1291,15 +1291,15 @@ document.querySelectorAll('.win-bar[data-win]').forEach(function(bar) {
   var MESSAGES = [
     "let's build something!",
     "Go Tartans! 🏴",
-    "open to work &\nopen to snacks 🍕",
-    "found a bug?\\nit's a feature, promise 🙃"
+    "open to work &<br>open to snacks 🍕",
+    "found a bug?<br>it's a feature, promise 🙃"
   ];
   var bubbleTimer = null;
   var bubble = document.getElementById('speech-bubble');
 
   window.showBubble = function showBubble(msg) {
     if (!bubble) return;
-    bubble.textContent = msg;
+    bubble.innerHTML = msg;
     bubble.classList.add('show');
     if (bubbleTimer) clearTimeout(bubbleTimer);
     bubbleTimer = setTimeout(function() {
